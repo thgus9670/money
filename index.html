@@ -3,266 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>지안 전용 가계부</title>
+    <title>스마트 가계부 & 체크리스트</title>
     
-    <!-- 홈 화면 아이콘을 이모티콘으로 설정 -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
+    <!-- 홈 화면 아이콘 설정 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>">
 
-    
     <style>
-    :root {
-        --primary-color: #00b894;
-        --background-color: #f1f2f6;
-        --card-color: #ffffff;
-        --text-color: #2d3436;
-        --border-color: #e4e7eb;
-        --completed-color: #a4b0be;
-    }
+        :root {
+            --primary-color: #00b894;
+            --background-color: #f1f2f6;
+            --card-color: #ffffff;
+            --text-color: #2d3436;
+            --border-color: #e4e7eb;
+            --completed-color: #a4b0be;
+        }
 
-    * {
-        box-sizing: border-box;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-    body {
-        background-color: var(--background-color);
-        color: var(--text-color);
-        margin: 0;
-        padding: 12px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-    }
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
 
-    .app-container {
-        width: 100%;
-        max-width: 480px;
-        background: var(--card-color);
-        border-radius: 24px;
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-        padding: 16px; /* 여백을 살짝 줄여 공간 확보 */
-        overflow: hidden; /* 영역 밖으로 튀어나가는 것 방지 */
-    }
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-color);
+            border-radius: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            padding: 16px;
+            overflow: hidden;
+        }
 
-    h1 {
-        font-size: 20px;
-        margin-top: 4px;
-        margin-bottom: 20px;
-        text-align: center;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-    }
+        h1 {
+            font-size: 20px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
 
-    /* 대시보드 */
-    .dashboard {
-        background: #f8f9fa;
-        border-radius: 16px;
-        padding: 16px;
-        margin-bottom: 24px;
-        border: 1px solid #eef0f2;
-    }
+        .current-month-title {
+            text-align: center;
+            font-size: 14px;
+            color: #747d8c;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
 
-    .dashboard-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-    }
-    .dashboard-row:last-child {
-        margin-bottom: 0;
-        padding-top: 12px;
-        border-top: 1px dashed #dcdde1;
-    }
+        /* 대시보드 */
+        .dashboard {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid #eef0f2;
+        }
 
-    .dashboard-row label {
-        font-size: 14px;
-        font-weight: 600;
-        color: #57606f;
-    }
+        .dashboard-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .dashboard-row:nth-child(3) {
+            margin-bottom: 0;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #dcdde1;
+        }
+        .dashboard-control {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
 
-    .dashboard-row input {
-        width: 100px;
-        padding: 6px 10px;
-        border: 1px solid #c8d6e5;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 700;
-        text-align: right;
-        outline: none;
-    }
-    .dashboard-row input:focus {
-        border-color: var(--primary-color);
-    }
+        .dashboard-row label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #57606f;
+        }
 
-    .dashboard-row .value {
-        font-size: 15px;
-        font-weight: 700;
-    }
-    
-    .dashboard-row .value.remaining {
-        color: #0984e3;
-        font-size: 16px;
-    }
+        .dashboard-row input {
+            width: 100px;
+            padding: 6px 10px;
+            border: 1px solid #c8d6e5;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: right;
+            outline: none;
+        }
+        .dashboard-row input:focus {
+            border-color: var(--primary-color);
+        }
 
-    /* 섹션 구분 */
-    .section-title {
-        font-size: 14px;
-        font-weight: 700;
-        margin: 20px 0 10px 0;
-        color: #2d3436;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
+        .dashboard-row .value {
+            font-size: 15px;
+            font-weight: 700;
+        }
+        
+        .dashboard-row .value.remaining {
+            color: #0984e3;
+            font-size: 16px;
+        }
 
-    /* 계좌 그룹 카드 */
-    .account-group {
-        background: #fff;
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 12px;
-        margin-bottom: 14px;
-    }
+        .reset-btn {
+            background: #ffeaa7;
+            border: none;
+            color: #d63031;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .reset-btn:hover {
+            background: #fdcb6e;
+        }
 
-    .account-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid #f1f2f6;
-    }
+        /* 섹션 구분 */
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin: 20px 0 10px 0;
+            color: #2d3436;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-    .account-title {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 13px;
-        font-weight: 700;
-    }
+        /* 계좌 그룹 카드 */
+        .account-group {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px;
+            margin-bottom: 14px;
+        }
 
-    .badge {
-        padding: 3px 6px;
-        border-radius: 6px;
-        font-size: 10px;
-        font-weight: 600;
-        color: #fff;
-    }
-    .badge.kakao { background-color: #f7e600; color: #3c1e1e; }
-    .badge.toss { background-color: #4854ff; }
-    .badge.mirae { background-color: #004a96; }
-    .badge.kb { background-color: #7a6e65; }
-    .badge.card { background-color: #2f3542; }
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #f1f2f6;
+        }
 
-    .account-subtotal {
-        font-size: 12px;
-        font-weight: 600;
-        color: #57606f;
-    }
-    .account-subtotal span {
-        font-weight: 700;
-        color: #2d3436;
-    }
+        .account-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
 
-    /* 리스트 및 행 디자인 리팩토링 (삐져나옴 방지 핵심) */
-    .item-list {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
+        .badge {
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .badge.kakao { background-color: #f7e600; color: #3c1e1e; }
+        .badge.toss { background-color: #4854ff; }
+        .badge.mirae { background-color: #004a96; }
+        .badge.kb { background-color: #7a6e65; }
 
-    .item-row {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        width: 100%;
-    }
+        .account-subtotal {
+            font-size: 12px;
+            font-weight: 600;
+            color: #57606f;
+        }
+        .account-subtotal span {
+            font-weight: 700;
+            color: #2d3436;
+        }
 
-    .todo-check {
-        width: 16px;
-        height: 16px;
-        cursor: pointer;
-        accent-color: var(--primary-color);
-        flex-shrink: 0; /* 체크박스 크기 절대 사수 */
-    }
+        /* 리스트 및 행 디자인 */
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-    .item-inputs {
-        display: flex;
-        flex: 1;
-        gap: 4px;
-        align-items: center;
-        min-width: 0; /* flex 자식이 부모 영역 밖으로 밀리는 것 방지 */
-    }
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+        }
 
-    .item-inputs input {
-        padding: 6px;
-        border: 1px solid #f1f2f6;
-        border-radius: 6px;
-        font-size: 12px;
-        background: #f8f9fa;
-        outline: none;
-        transition: all 0.2s;
-        min-width: 0; /* 인풋창 자체의 최소 너비를 없애서 균등 분배 가능하게 설정 */
-    }
-    .item-inputs input:focus {
-        background: #fff;
-        border-color: var(--primary-color);
-    }
+        .todo-check {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+            flex-shrink: 0;
+        }
 
-    /* 가로폭 비율 최적화: 항목명(1.2) : 금액(1) : 메모(1.3) */
-    .input-name { flex: 1.2; font-weight: 500; }
-    .input-amount { flex: 1; text-align: right; font-weight: 600; }
-    .input-memo { flex: 1.3; color: #747d8c; font-size: 11px; }
+        .item-inputs {
+            display: flex;
+            flex: 1;
+            gap: 4px;
+            align-items: center;
+            min-width: 0;
+        }
 
-    /* 체크 시 투명도 및 취소선 */
-    .item-row.completed .input-name,
-    .item-row.completed .input-amount,
-    .item-row.completed .input-memo {
-        text-decoration: line-through;
-        color: var(--completed-color);
-        opacity: 0.5;
-    }
+        .item-inputs input {
+            padding: 6px;
+            border: 1px solid #f1f2f6;
+            border-radius: 6px;
+            font-size: 12px;
+            background: #f8f9fa;
+            outline: none;
+            transition: all 0.2s;
+            min-width: 0;
+        }
+        .item-inputs input:focus {
+            background: #fff;
+            border-color: var(--primary-color);
+        }
 
-    .add-row-btn {
-        background: #f8f9fa;
-        border: 1px dashed #ccc;
-        color: #747d8c;
-        padding: 6px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 11px;
-        font-weight: 500;
-        width: 100%;
-        margin-top: 10px;
-        transition: all 0.2s;
-    }
-    .add-row-btn:hover {
-        background: #f1f2f6;
-        color: #2d3436;
-    }
+        .input-name { flex: 1.3; font-weight: 500; }
+        .input-amount { flex: 1; text-align: right; font-weight: 600; }
+        .input-memo { flex: 1.2; color: #747d8c; font-size: 11px; }
 
-    .delete-btn {
-        background: none;
-        border: none;
-        color: #ff6b6b;
-        cursor: pointer;
-        font-size: 15px;
-        padding: 0 2px;
-        flex-shrink: 0; /* X 버튼 안 찌그러지게 고정 */
-    }
-</style>
+        .item-row.completed .input-name,
+        .item-row.completed .input-amount,
+        .item-row.completed .input-memo {
+            text-decoration: line-through;
+            color: var(--completed-color);
+            opacity: 0.5;
+        }
+
+        .add-row-btn {
+            background: #f8f9fa;
+            border: 1px dashed #ccc;
+            color: #747d8c;
+            padding: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+        .add-row-btn:hover {
+            background: #f1f2f6;
+            color: #2d3436;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-size: 15px;
+            padding: 0 2px;
+            flex-shrink: 0;
+        }
+    </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h1>💸 지안 전용 가계부</h1>
+    <h1>💸 스마트 가계부 & 투두</h1>
+    <div class="current-month-title" id="current-month-display">0000년 00월 정산</div>
 
     <!-- 상단 대시보드 -->
     <div class="dashboard">
         <div class="dashboard-row">
             <label>총 예산</label>
-            <input type="number" id="total-budget" value="228" oninput="calculateTotal()">
+            <input type="number" id="total-budget" value="228" oninput="saveAndCalculate()">
         </div>
         <div class="dashboard-row">
             <label>총 지출 합계</label>
@@ -272,9 +297,12 @@
             <label>남은 금액</label>
             <div class="value remaining" id="remaining-money">0</div>
         </div>
+        <div class="dashboard-control">
+            <button class="reset-btn" onclick="confirmReset()">이달의 내역 리셋 🔄</button>
+        </div>
     </div>
 
-    <!-- 1. 고정 지출 섹션 -->
+    <!-- 고정 지출 섹션 -->
     <div class="section-title">📌 고정 지출</div>
 
     <!-- 카카오뱅크 -->
@@ -286,27 +314,8 @@
             </div>
             <div class="account-subtotal">소계: <span class="subtotal-val">0</span></div>
         </div>
-        <div class="item-list" id="list-kakao">
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="Sp">
-                    <input type="number" class="input-amount" value="50" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="적금">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="청약">
-                    <input type="number" class="input-amount" value="2" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="주택청약">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-        </div>
-        <button class="add-row-btn" onclick="addRow('list-kakao')">+ 항목 추가</button>
+        <div class="item-list" id="list-kakao"></div>
+        <button class="add-row-btn" onclick="createBlankRow('list-kakao')">+ 항목 추가</button>
     </div>
 
     <!-- 토스 -->
@@ -318,50 +327,8 @@
             </div>
             <div class="account-subtotal">소계: <span class="subtotal-val">0</span></div>
         </div>
-        <div class="item-list" id="list-toss">
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="회비">
-                    <input type="number" class="input-amount" value="18" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="모임회비">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="유튜브">
-                    <input type="number" class="input-amount" value="0.68" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="구독료">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-        </div>
-        <button class="add-row-btn" onclick="addRow('list-toss')">+ 항목 추가</button>
-    </div>
-
-    <!-- 미래에셋 -->
-    <div class="account-group" data-group="mirae">
-        <div class="account-header">
-            <div class="account-title">
-                <span class="badge mirae">미래에셋</span>
-                <span>미래에셋</span>
-            </div>
-            <div class="account-subtotal">소계: <span class="subtotal-val">0</span></div>
-        </div>
-        <div class="item-list" id="list-mirae">
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="Qqqm">
-                    <input type="number" class="input-amount" value="50" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="ETF 주식">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-        </div>
-        <button class="add-row-btn" onclick="addRow('list-mirae')">+ 항목 추가</button>
+        <div class="item-list" id="list-toss"></div>
+        <button class="add-row-btn" onclick="createBlankRow('list-toss')">+ 항목 추가</button>
     </div>
 
     <!-- 국민은행 -->
@@ -373,57 +340,136 @@
             </div>
             <div class="account-subtotal">소계: <span class="subtotal-val">0</span></div>
         </div>
-        <div class="item-list" id="list-kb">
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="폰요금">
-                    <input type="number" class="input-amount" value="4" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="자동이체">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-        </div>
-        <button class="add-row-btn" onclick="addRow('list-kb')">+ 항목 추가</button>
+        <div class="item-list" id="list-kb"></div>
+        <button class="add-row-btn" onclick="createBlankRow('list-kb')">+ 항목 추가</button>
     </div>
 
-
-    <!-- 2. 카드값 섹션 -->
-    <div class="section-title">💳 카드값</div>
-    <div class="account-group" data-group="card">
+    <!-- 미래에셋 -->
+    <div class="account-group" data-group="mirae">
         <div class="account-header">
             <div class="account-title">
-                <span class="badge card">신용/체크</span>
-                <span>카드 대금</span>
+                <span class="badge mirae">미래에셋</span>
+                <span>미래에셋</span>
             </div>
             <div class="account-subtotal">소계: <span class="subtotal-val">0</span></div>
         </div>
-        <div class="item-list" id="list-card">
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="국민카드">
-                    <input type="number" class="input-amount" value="15" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="교통비 포함">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-            <div class="item-row">
-                <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-                <div class="item-inputs">
-                    <input type="text" class="input-name" value="삼성카드">
-                    <input type="number" class="input-amount" value="12" oninput="calculateTotal()">
-                    <input type="text" class="input-memo" value="쇼핑/기름">
-                </div>
-                <button class="delete-btn" onclick="deleteRow(this)">×</button>
-            </div>
-        </div>
-        <button class="add-row-btn" onclick="addRow('list-card')">+ 항목 추가</button>
+        <div class="item-list" id="list-mirae"></div>
+        <button class="add-row-btn" onclick="createBlankRow('list-mirae')">+ 항목 추가</button>
     </div>
 
 </div>
 
 <script>
+    // 새로운 요청에 맞춰 완전히 리팩토링된 마스터 데이터
+    const defaultFixedExpenses = {
+        budget: 228,
+        lists: {
+            'list-kakao': [
+                { name: '여행적금', amount: 10, memo: '적금', completed: false },
+                { name: '미란제자들', amount: 3, memo: '모임', completed: false },
+                { name: '경조사', amount: 5, memo: '예비', completed: false },
+                { name: '생일', amount: 4, memo: '예비', completed: false },
+                { name: '유튜브', amount: 0.68, memo: '구독료', completed: false }
+            ],
+            'list-toss': [
+                { name: 'QQQM', amount: 50, memo: '주식 ETF', completed: false },
+                { name: '아빠 환갑', amount: 5, memo: '적금', completed: false },
+                { name: '네일', amount: 3.5, memo: '관리', completed: false },
+                { name: '차', amount: 15, memo: '고정', completed: false },
+                { name: '기름', amount: 12, memo: '주유', completed: false },
+                { name: '폰요금', amount: 4, memo: '통신비', completed: false }
+            ],
+            'list-kb': [
+                { name: '청약', amount: 2, memo: '주택청약', completed: false }
+            ],
+            'list-mirae': [
+                { name: 'S&P 500', amount: 50, memo: '주식 ETF', completed: false }
+            ]
+        }
+    };
+
+    function getCurrentYearMonth() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
+    }
+
+    function initApp() {
+        const currentMonth = getCurrentYearMonth();
+        document.getElementById('current-month-display').innerText = currentMonth.replace('-', '년 ') + '월 정산';
+
+        const savedMonth = localStorage.getItem('budget_saved_month');
+        
+        if (savedMonth !== currentMonth) {
+            loadDefaultData();
+            localStorage.setItem('budget_saved_month', currentMonth);
+        } else {
+            loadSavedData();
+        }
+    }
+
+    function loadDefaultData() {
+        document.getElementById('total-budget').value = defaultFixedExpenses.budget;
+        
+        Object.keys(defaultFixedExpenses.lists).forEach(listId => {
+            const listContainer = document.getElementById(listId);
+            if (listContainer) {
+                listContainer.innerHTML = '';
+                defaultFixedExpenses.lists[listId].forEach(item => {
+                    appendRowDOM(listContainer, item.name, item.amount, item.memo, item.completed);
+                });
+            }
+        });
+        saveAndCalculate();
+    }
+
+    function loadSavedData() {
+        const savedData = localStorage.getItem('budget_monthly_data');
+        if (!savedData) {
+            loadDefaultData();
+            return;
+        }
+
+        const parsed = JSON.parse(savedData);
+        document.getElementById('total-budget').value = parsed.budget || 228;
+
+        Object.keys(parsed.lists).forEach(listId => {
+            const listContainer = document.getElementById(listId);
+            if (listContainer) {
+                listContainer.innerHTML = '';
+                if (parsed.lists[listId]) {
+                    parsed.lists[listId].forEach(item => {
+                        appendRowDOM(listContainer, item.name, item.amount, item.memo, item.completed);
+                    });
+                }
+            }
+        });
+        calculateTotal();
+    }
+
+    function appendRowDOM(container, name, amount, memo, completed) {
+        const row = document.createElement('div');
+        row.className = `item-row ${completed ? 'completed' : ''}`;
+        
+        row.innerHTML = `
+            <input type="checkbox" class="todo-check" onchange="toggleComplete(this)" ${completed ? 'checked' : ''}>
+            <div class="item-inputs">
+                <input type="text" class="input-name" value="${name}" placeholder="항목" oninput="saveAndCalculate()">
+                <input type="number" class="input-amount" value="${amount}" placeholder="0" oninput="saveAndCalculate()" step="any">
+                <input type="text" class="input-memo" value="${memo}" placeholder="메모" oninput="saveAndCalculate()">
+            </div>
+            <button class="delete-btn" onclick="deleteRow(this)">×</button>
+        `;
+        container.appendChild(row);
+    }
+
+    function createBlankRow(targetListId) {
+        const container = document.getElementById(targetListId);
+        appendRowDOM(container, '', 0, '', false);
+        saveAndCalculate();
+    }
+
     function calculateTotal() {
         const budget = parseFloat(document.getElementById('total-budget').value) || 0;
         const groups = document.querySelectorAll('.account-group');
@@ -448,7 +494,35 @@
         document.getElementById('remaining-money').innerText = remaining;
     }
 
-    // 완전히 새로 고친 체크박스 함수 (레이아웃 틀어짐 방지)
+    function saveAndCalculate() {
+        calculateTotal();
+        
+        const dataToSave = {
+            budget: parseFloat(document.getElementById('total-budget').value) || 0,
+            lists: {}
+        };
+
+        const listIds = ['list-kakao', 'list-toss', 'list-kb', 'list-mirae'];
+        listIds.forEach(listId => {
+            const container = document.getElementById(listId);
+            if (container) {
+                dataToSave.lists[listId] = [];
+                const rows = container.querySelectorAll('.item-row');
+                
+                rows.forEach(row => {
+                    const name = row.querySelector('.input-name').value;
+                    const amount = parseFloat(row.querySelector('.input-amount').value) || 0;
+                    const memo = row.querySelector('.input-memo').value;
+                    const completed = row.querySelector('.todo-check').checked;
+                    
+                    dataToSave.lists[listId].push({ name, amount, memo, completed });
+                });
+            }
+        });
+
+        localStorage.setItem('budget_monthly_data', JSON.stringify(dataToSave));
+    }
+
     function toggleComplete(checkbox) {
         const row = checkbox.closest('.item-row');
         if (checkbox.checked) {
@@ -456,34 +530,22 @@
         } else {
             row.classList.remove('completed');
         }
-    }
-
-    function addRow(targetListId) {
-        const targetList = document.getElementById(targetListId);
-        const tr = document.createElement('div');
-        tr.className = 'item-row';
-        
-        tr.innerHTML = `
-            <input type="checkbox" class="todo-check" onchange="toggleComplete(this)">
-            <div class="item-inputs">
-                <input type="text" class="input-name" placeholder="항목">
-                <input type="number" class="input-amount" value="0" oninput="calculateTotal()">
-                <input type="text" class="input-memo" placeholder="메모">
-            </div>
-            <button class="delete-btn" onclick="deleteRow(this)">×</button>
-        `;
-        
-        targetList.appendChild(tr);
-        calculateTotal();
+        saveAndCalculate();
     }
 
     function deleteRow(button) {
         const row = button.closest('.item-row');
         row.remove();
-        calculateTotal();
+        saveAndCalculate();
     }
 
-    window.onload = calculateTotal;
+    function confirmReset() {
+        if (confirm("이번 달 기록을 초기화하고 고정지출 기본 목록을 다시 세팅할까요?")) {
+            loadDefaultData();
+        }
+    }
+
+    window.onload = initApp;
 </script>
 
 </body>
