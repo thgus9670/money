@@ -53,12 +53,57 @@
             letter-spacing: -0.5px;
         }
 
-        .current-month-title {
+        /* 월 네비게이션 스타일 */
+        .month-navigator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            background: #eef2f5;
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        .nav-btn {
+            background: #fff;
+            border: 1px solid #c8d6e5;
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #2d3436;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .month-select {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2d3436;
+            border: none;
+            background: transparent;
+            outline: none;
+            cursor: pointer;
             text-align: center;
-            font-size: 14px;
+        }
+
+        /* 연간 합계 노티스 */
+        .yearly-summary {
+            font-size: 11px;
+            text-align: center;
             color: #747d8c;
-            font-weight: 600;
             margin-bottom: 16px;
+            font-weight: 600;
+        }
+        .yearly-summary span {
+            color: #d63031;
+            font-weight: 700;
         }
 
         /* 대시보드 */
@@ -281,7 +326,19 @@
 
 <div class="app-container">
     <h1>💸 지안 전용 가계부</h1>
-    <div class="current-month-title" id="current-month-display">0000년 00월 정산</div>
+    
+    <!-- 월 선택 네비게이터 -->
+    <div class="month-navigator">
+        <button class="nav-btn" onclick="changeMonth(-1)">◀ 이전달</button>
+        <select class="month-select" id="month-picker" onchange="onSelectMonthChange(this.value)">
+            <!-- 스크립트에서 1월~12월 동적 생성 -->
+        </select>
+        <button class="nav-btn" onclick="changeMonth(1)">다음달 ▶</button>
+    </div>
+
+    <div class="yearly-summary" id="yearly-summary-text">
+        올해 총 누적 지출: <span id="yearly-total-val">0</span> 만원
+    </div>
 
     <!-- 상단 대시보드 -->
     <div class="dashboard">
@@ -360,7 +417,6 @@
 </div>
 
 <script>
-    // 새로운 요청에 맞춰 완전히 리팩토링된 마스터 데이터
     const defaultFixedExpenses = {
         budget: 228,
         lists: {
@@ -388,25 +444,85 @@
         }
     };
 
-    function getCurrentYearMonth() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        return `${year}-${month}`;
-    }
+    let currentYear = new Date().getFullYear();
+    let currentMonth = new Date().getMonth() + 1; // 1~12
 
     function initApp() {
-        const currentMonth = getCurrentYearMonth();
-        document.getElementById('current-month-display').innerText = currentMonth.replace('-', '년 ') + '월 정산';
+        buildMonthPickerOptions();
+        loadMonthData(currentYear, currentMonth);
+    }
 
-        const savedMonth = localStorage.getItem('budget_saved_month');
-        
-        if (savedMonth !== currentMonth) {
-            loadDefaultData();
-            localStorage.setItem('budget_saved_month', currentMonth);
-        } else {
-            loadSavedData();
+    // 1월~12월 셀렉트 드롭다운 옵션 생성
+    function buildMonthPickerOptions() {
+        const picker = document.getElementById('month-picker');
+        picker.innerHTML = '';
+        for (let m = 1; m <= 12; m++) {
+            const opt = document.createElement('option');
+            const mStr = String(m).padStart(2, '0');
+            opt.value = `${currentYear}-${mStr}`;
+            opt.innerText = `${currentYear}년 ${mStr}월`;
+            if (m === currentMonth) opt.selected = true;
+            picker.appendChild(opt);
         }
+    }
+
+    // 버튼 클릭 시 이전달/다음달 이동
+    function changeMonth(delta) {
+        currentMonth += delta;
+        if (currentMonth < 1) {
+            currentMonth = 12;
+            currentYear -= 1;
+            buildMonthPickerOptions();
+        } else if (currentMonth > 12) {
+            currentMonth = 1;
+            currentYear += 1;
+            buildMonthPickerOptions();
+        }
+        
+        const mStr = String(currentMonth).padStart(2, '0');
+        document.getElementById('month-picker').value = `${currentYear}-${mStr}`;
+        loadMonthData(currentYear, currentMonth);
+    }
+
+    // 드롭다운 변경 시 이동
+    function onSelectMonthChange(val) {
+        const [y, m] = val.split('-');
+        currentYear = parseInt(y);
+        currentMonth = parseInt(m);
+        loadMonthData(currentYear, currentMonth);
+    }
+
+    function getStorageKey(year, month) {
+        const mStr = String(month).padStart(2, '0');
+        return `budget_data_${year}_${mStr}`;
+    }
+
+    // 선택된 월의 데이터 불러오기
+    function loadMonthData(year, month) {
+        const key = getStorageKey(year, month);
+        const savedData = localStorage.getItem(key);
+
+        if (!savedData) {
+            // 해당 달 데이터가 없으면 기본 고정지출 데이터로 세팅
+            loadDefaultData();
+        } else {
+            const parsed = JSON.parse(savedData);
+            document.getElementById('total-budget').value = parsed.budget || defaultFixedExpenses.budget;
+
+            Object.keys(parsed.lists).forEach(listId => {
+                const listContainer = document.getElementById(listId);
+                if (listContainer) {
+                    listContainer.innerHTML = '';
+                    if (parsed.lists[listId]) {
+                        parsed.lists[listId].forEach(item => {
+                            appendRowDOM(listContainer, item.name, item.amount, item.memo, item.completed);
+                        });
+                    }
+                }
+            });
+            calculateTotal();
+        }
+        calculateYearlyTotal();
     }
 
     function loadDefaultData() {
@@ -422,30 +538,6 @@
             }
         });
         saveAndCalculate();
-    }
-
-    function loadSavedData() {
-        const savedData = localStorage.getItem('budget_monthly_data');
-        if (!savedData) {
-            loadDefaultData();
-            return;
-        }
-
-        const parsed = JSON.parse(savedData);
-        document.getElementById('total-budget').value = parsed.budget || 228;
-
-        Object.keys(parsed.lists).forEach(listId => {
-            const listContainer = document.getElementById(listId);
-            if (listContainer) {
-                listContainer.innerHTML = '';
-                if (parsed.lists[listId]) {
-                    parsed.lists[listId].forEach(item => {
-                        appendRowDOM(listContainer, item.name, item.amount, item.memo, item.completed);
-                    });
-                }
-            }
-        });
-        calculateTotal();
     }
 
     function appendRowDOM(container, name, amount, memo, completed) {
@@ -494,6 +586,25 @@
         document.getElementById('remaining-money').innerText = remaining;
     }
 
+    // 연간 전체 누적 지출 계산
+    function calculateYearlyTotal() {
+        let yearlyTotal = 0;
+        for (let m = 1; m <= 12; m++) {
+            const key = getStorageKey(currentYear, m);
+            const savedData = localStorage.getItem(key);
+            if (savedData) {
+                const parsed = JSON.parse(savedData);
+                Object.values(parsed.lists).forEach(itemList => {
+                    itemList.forEach(item => {
+                        yearlyTotal += parseFloat(item.amount) || 0;
+                    });
+                });
+            }
+        }
+        yearlyTotal = Math.round(yearlyTotal * 100) / 100;
+        document.getElementById('yearly-total-val').innerText = yearlyTotal;
+    }
+
     function saveAndCalculate() {
         calculateTotal();
         
@@ -520,7 +631,9 @@
             }
         });
 
-        localStorage.setItem('budget_monthly_data', JSON.stringify(dataToSave));
+        const key = getStorageKey(currentYear, currentMonth);
+        localStorage.setItem(key, JSON.stringify(dataToSave));
+        calculateYearlyTotal();
     }
 
     function toggleComplete(checkbox) {
@@ -540,7 +653,7 @@
     }
 
     function confirmReset() {
-        if (confirm("이번 달 기록을 초기화하고 고정지출 기본 목록을 다시 세팅할까요?")) {
+        if (confirm(`${currentYear}년 ${currentMonth}월 기록을 초기화하고 기본 고정지출 틀을 다시 세팅할까요?`)) {
             loadDefaultData();
         }
     }
