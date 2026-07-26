@@ -93,7 +93,7 @@
             text-align: center;
         }
 
-        /* 연간 합계 노티스 */
+        /* 연간 합계 요약 */
         .yearly-summary {
             font-size: 11px;
             text-align: center;
@@ -423,12 +423,15 @@
             'list-kakao': [
                 { name: '여행적금', amount: 10, memo: '적금', completed: false },
                 { name: '미란제자들', amount: 3, memo: '모임', completed: false },
+                { name: '부산모임', amount: 3, memo: '모임', completed: false },
                 { name: '경조사', amount: 5, memo: '예비', completed: false },
                 { name: '생일', amount: 4, memo: '예비', completed: false },
                 { name: '유튜브', amount: 0.68, memo: '구독료', completed: false }
             ],
             'list-toss': [
                 { name: 'QQQM', amount: 50, memo: '주식 ETF', completed: false },
+                { name: '가족', amount: 10, memo: '고정', completed: false },
+                { name: '허소', amount: 2, memo: '고정', completed: false },
                 { name: '아빠 환갑', amount: 5, memo: '적금', completed: false },
                 { name: '네일', amount: 3.5, memo: '관리', completed: false },
                 { name: '차', amount: 15, memo: '고정', completed: false },
@@ -444,10 +447,19 @@
         }
     };
 
-    let currentYear = new Date().getFullYear();
-    let currentMonth = new Date().getMonth() + 1; // 1~12
+    let currentYear, currentMonth;
 
     function initApp() {
+        // 접속 시 '다음 달'을 기본값으로 계산 (현재가 7월이면 8월이 첫 화면으로 표시)
+        const today = new Date();
+        currentYear = today.getFullYear();
+        currentMonth = today.getMonth() + 2; // getMonth()는 0~11 이므로 +1(현재달), +2(다음달)
+
+        if (currentMonth > 12) {
+            currentMonth -= 12;
+            currentYear += 1;
+        }
+
         buildMonthPickerOptions();
         loadMonthData(currentYear, currentMonth);
     }
@@ -503,7 +515,6 @@
         const savedData = localStorage.getItem(key);
 
         if (!savedData) {
-            // 해당 달 데이터가 없으면 기본 고정지출 데이터로 세팅
             loadDefaultData();
         } else {
             const parsed = JSON.parse(savedData);
