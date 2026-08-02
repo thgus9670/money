@@ -450,15 +450,10 @@
     let currentYear, currentMonth;
 
     function initApp() {
-        // 접속 시 '다음 달'을 기본값으로 계산 (현재가 7월이면 8월이 첫 화면으로 표시)
+        // 접속 시 항상 '현재 달'을 첫 화면으로 로딩
         const today = new Date();
         currentYear = today.getFullYear();
-        currentMonth = today.getMonth() + 2; // getMonth()는 0~11 이므로 +1(현재달), +2(다음달)
-
-        if (currentMonth > 12) {
-            currentMonth -= 12;
-            currentYear += 1;
-        }
+        currentMonth = today.getMonth() + 1; // getMonth()는 0~11 이므로 +1 하면 현재 달
 
         buildMonthPickerOptions();
         loadMonthData(currentYear, currentMonth);
